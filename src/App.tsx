@@ -84,16 +84,17 @@ export default function App() {
     setStatus(null);
 
     const formData = new FormData();
-    const metadata = files.map(file => ({
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      lastModified: file.lastModified
-    }));
-    formData.append('metadata', JSON.stringify(metadata));
-
-    files.forEach(file => {
-      formData.append('files[]', file);
+    
+    // Send total count
+    formData.append('totalFiles', files.length.toString());
+    
+    // Append each file and its properties as distinct form fields 
+    // so n8n can easily pick them up in the body schema
+    files.forEach((file, index) => {
+      formData.append(`file_${index}`, file, file.name);
+      formData.append(`fileName_${index}`, file.name);
+      formData.append(`fileSize_${index}`, file.size.toString());
+      formData.append(`fileType_${index}`, file.type);
     });
 
     try {
