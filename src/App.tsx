@@ -91,7 +91,9 @@ export default function App() {
     // Append each file and its properties as distinct form fields 
     // so n8n can easily pick them up in the body schema
     files.forEach((file, index) => {
-      formData.append(`file_${index}`, file, file.name);
+      // n8n extracts the primary binary field by default using the key 'data'
+      const binaryKey = index === 0 ? 'data' : `data${index}`;
+      formData.append(binaryKey, file, file.name);
       formData.append(`fileName_${index}`, file.name);
       formData.append(`fileSize_${index}`, file.size.toString());
       formData.append(`fileType_${index}`, file.type);
