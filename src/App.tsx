@@ -84,6 +84,14 @@ export default function App() {
     setStatus(null);
 
     const formData = new FormData();
+    const metadata = files.map(file => ({
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      lastModified: file.lastModified
+    }));
+    formData.append('metadata', JSON.stringify(metadata));
+
     files.forEach(file => {
       formData.append('files[]', file);
     });
